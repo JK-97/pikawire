@@ -1,0 +1,15 @@
+bin/
+dist/
+*.checkpoint.json
+*.log
+events*.jsonl
+ev.file
+.DS_Store
+pikawire.checkpoint.json
+*.tmp
+events.jsonl
+internal/dbsync/cgoadapter/drivers/
+
+# stray tool binaries built at repo root
+/pikatool
+/pikawire

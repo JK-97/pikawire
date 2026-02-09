@@ -1,0 +1,15 @@
+# build context hygiene: the sidecar artifacts are built INSIDE the image,
+# local leftovers must never shadow them
+bin/
+dist/
+.git
+drivers/pikawire-dumper-*
+internal/dbsync/cgoadapter/drivers/
+*.checkpoint.json
+*.log
+events*.jsonl
+ev.file
+.DS_Store
+*.tmp
+pikawire.checkpoint.json
+pikawire-buffer

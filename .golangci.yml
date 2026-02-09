@@ -1,0 +1,13 @@
+run:
+  timeout: 3m
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+    - misspell
+    - gofmt
+    - gocritic
+  disable:
+    - errcheck # errors handled via return in sinks; noisy until triaged
