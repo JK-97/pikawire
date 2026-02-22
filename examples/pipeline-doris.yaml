@@ -1,0 +1,20 @@
+# PikiwiDB -> Apache Doris (unique-key MoW, partial updates + delete sign)
+source:
+  host: pika
+  port: 9221
+  db: db0
+pipeline:
+  driver: doris
+  fenodes: ["doris-fe:8030"]
+  user: root
+  password: ""
+  flush_every: 200ms
+  max_batch_rows: 2000
+  rules:
+    - types: [hash]
+      key_pattern: "user:{uid}"
+      table: pikawire.ods_user   # must exist with merge-on-write enabled
+      pk: [uid]
+      fields: { name: name, age: age }
+      delete: row
+checkpoint: pikawire.checkpoint.json

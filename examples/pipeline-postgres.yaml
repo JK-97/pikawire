@@ -1,0 +1,29 @@
+# PikiwiDB -> Postgres with the embedded pipeline (no Kafka hop)
+source:
+  host: pika
+  port: 9221
+  db: db0
+  local_ip: 127.0.0.1
+  local_port: 21333
+pipeline:
+  driver: postgres
+  dsn: "host=pg user=pikawire password=pikawire dbname=pikawire sslmode=disable"
+  flush_every: 100ms
+  max_batch_rows: 500
+  rules:
+    # hash entities: user:<uid> -> public.ods_user row
+    - types: [hash]
+      key_pattern: "user:{uid}"
+      table: public.ods_user
+      pk: [uid]
+      fields: { name: name, age: age }
+      delete: row
+    # JSON string values: acct:<id> -> account table (expanded)
+    - types: [string]
+      key_pattern: "acct:{id}"
+      table: public.ods_account
+      pk: [id]
+      value_json: true
+      json_columns: [balance, name]
+checkpoint: pikawire.checkpoint.json
+include_ttl: true

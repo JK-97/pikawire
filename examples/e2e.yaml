@@ -1,0 +1,16 @@
+# used by scripts/e2e.sh against the lab compose stack
+source:
+  host: pika
+  port: 9221
+  db: db0
+  local_ip: 127.0.0.1
+  local_port: 21333
+sink:
+  kafka:
+    brokers: ["kafka:9092"]
+    topic: pikawire.db0
+    client_id: e2e
+checkpoint: e2e.checkpoint.json
+include_ttl: true
+dump_root: /tmp/pikawire-e2e-dump
+heartbeat: 5s

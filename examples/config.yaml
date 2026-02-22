@@ -1,0 +1,29 @@
+# pikawire example — mode A raw event stream to Kafka
+source:
+  host: 127.0.0.1
+  port: 9221
+  # password: ""
+  db: db0
+  # local_ip / local_port: identity advertised to the master in the PB
+  # replication handshake (MetaSync/TrySync). Defaults to source.host.
+  local_ip: 127.0.0.1
+  local_port: 21333
+
+sink:
+  kafka:
+    brokers: ["127.0.0.1:9092"]
+    topic: pikawire.db0
+    client_id: pikawire
+    include_heartbeats: false
+
+# file: sink for debugging (mutually exclusive with kafka)
+# sink:
+#   file:
+#     path: events.jsonl
+
+checkpoint: pikawire.checkpoint.json
+include_ttl: true
+dump_root: pikawire-dump   # working dir for the fetched dbsync dump
+
+ack_every: 1s
+heartbeat: 30s

@@ -1,0 +1,31 @@
+# Pikawire demo: PikiwiDB + Redpanda + pikawire (mode A -> Kafka)
+#
+#   docker compose up -d
+#   docker compose exec kafka rpk topic consume pikawire.db0 -o start --num 10 -f "%v\n"
+#
+# Build the tool first: make build   (binary at ../bin/pikawire-dbsync)
+services:
+  pika:
+    image: pikadb/pika:latest   # PikiwiDB (Pika) official image
+    ports: ["9221:9221", "11221:11221"]
+    privileged: true
+    volumes:
+      - ./data:/pika/db
+      - ./log:/pika/log
+      - ./dump:/pika/dump
+  kafka:
+    image: redpandadata/redpanda:v24.1.9
+    ports: ["9092:9092"]
+    command: >
+      redpanda start --overprovisioned --smp 1 --memory 512M
+      --reserve-memory 0M --node-id 0 --check=false
+      --kafka-addr PLAINTEXT://0.0.0.0:9092
+      --advertise-kafka-addr PLAINTEXT://kafka:9092
+  pikawire:
+    image: alpine:3.20
+    volumes:
+      - ../bin:/work
+      - ./config.yaml:/work/config.yaml
+    working_dir: /work
+    command: ["./pikawire", "-c", "config.yaml"]
+    depends_on: [pika, kafka]

@@ -1,0 +1,9 @@
+source: { host: pika, port: 9221, db: db0 }
+sink:
+  kafka:
+    brokers: ["kafka:9092"]
+    topic: pikawire.db0
+checkpoint: /work/checkpoint.json   # note: mount a volume to persist
+include_ttl: true
+heartbeat: 30s
+metrics_addr: ":9090"
